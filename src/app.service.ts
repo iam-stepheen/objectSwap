@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { PayloadDtoResonse } from './dto/payload-response.dto';
 import { PayloadDto } from './dto/payload.dto';
 
@@ -9,11 +9,20 @@ export class AppService {
   }
 
   async swapObject(payloadDto: PayloadDto): Promise<PayloadDtoResonse> {
-    const swappedObject = swapObject(payloadDto.object);
-    return {
-      status: 'ok',
-      data: swappedObject,
-    };
+    var isNested = Object.keys(payloadDto.object).some(function (key) {
+      return (
+        payloadDto.object[key] && typeof payloadDto.object[key] === 'object'
+      );
+    });
+    if (isNested) {
+      throw new BadRequestException('Please don not enter a nested object');
+    } else {
+      const swappedObject = swapObject(payloadDto.object);
+      return {
+        status: 'ok',
+        data: swappedObject,
+      };
+    }
   }
 }
 
