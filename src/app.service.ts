@@ -15,7 +15,7 @@ export class AppService {
       );
     });
     if (isNested) {
-      throw new BadRequestException('Please don not enter a nested object');
+      throw new BadRequestException('Please do not enter a nested object');
     } else {
       const swappedObject = swapObject(payloadDto.object);
       return {
